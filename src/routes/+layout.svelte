@@ -1,37 +1,38 @@
 <script lang="ts">
-	import ASScroll from '@ashthornton/asscroll'
+	// import ASScroll from '@ashthornton/asscroll'
 	import { onMount } from 'svelte'
 
 	let show = true
 
-	const initialFunction = () => {
-		const asscroll = new ASScroll()
-		asscroll.enable()
-	}
+	// const initialFunction = () => {
+	// 	const asscroll = new ASScroll()
+	// 	asscroll.enable()
+	// }
 
 	onMount(() => {
-		initialFunction()
+		// initialFunction()
 		setTimeout(() => {
 			show = false
 		}, 1000)
 	})
 </script>
 
-<div class="layout-container">
+<slot />
+
+<!-- <div class="layout-container">
 	<div class={(show ? 'show' : 'hide') + ' page-transition'}>
 		<h1>Title</h1>
 	</div>
 	<div asscroll-container="true">
-		<slot />
 	</div>
-</div>
-
+</div> -->
 <style>
+	
 	.show {
 		background-color: blueviolet;
 		transform: translateX(0%);
 	}
-	
+
 	.hide {
 		transform: translateX(100%);
 		background-color: blueviolet;
@@ -43,7 +44,7 @@
 		height: 100vh;
 		justify-content: center;
 		position: fixed;
-		transition: transform 1.1s cubic-bezier(0.000, 0.000, 0.000, 0.995); /* custom */
+		transition: transform 1.1s cubic-bezier(0, 0, 0, 0.995); /* custom */
 		width: 100vw;
 		z-index: 100;
 	}

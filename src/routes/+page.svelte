@@ -1,6 +1,6 @@
-<script>
-	import AnimatedText from '../animation/AnimatedText.svelte'
-	import Section from '../components/Section.svelte'
+<script lang="ts">
+	import AnimatedText from '@animation/AnimatedText.svelte'
+	import Section from '@components/Section.svelte'
 </script>
 
 <main>
