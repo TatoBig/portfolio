@@ -4,11 +4,16 @@
 	import { Canvas, T, OrbitControls } from '@threlte/core'
 	import { onMount } from 'svelte'
 	import { spring } from 'svelte/motion'
+	import '@fontsource/urbanist/100.css'
 
 	let cube1 = CubeSpring()
 	let cube2 = CubeSpring()
 	let cube3 = CubeSpring()
 	let cube4 = CubeSpring()
+	let cube5 = CubeSpring()
+
+	let animateFirstname = false
+	let animateLastname = false
 
 	onMount(() => {
 		triggerAnimation()
@@ -25,29 +30,83 @@
 			$cube3 = 10
 		}, 1500)
 		setTimeout(() => {
-			$cube4 = 7
+			$cube4 = 11
+		}, 2000)
+		setTimeout(() => {
+			$cube5 = 8
 		}, 1500)
+
+		setTimeout(() => {
+			animateFirstname = true
+		}, 2800)
+		setTimeout(() => {
+			animateLastname = true
+		}, 3000)
+	}
+
+	let m = { x: 0, y: 0 }
+
+	let innerWidth = 0
+	let innerHeight = 0
+
+	function handleMousemove(event) {
+		m.x = event.clientX
+		m.y = event.clientY
 	}
 </script>
 
-<div class="container">
+<svelte:window bind:innerWidth bind:innerHeight />
+<div class="container" on:mousemove={handleMousemove}>
 	<Canvas>
-		<T.PerspectiveCamera makeDefault position={[20, 20, 20]} fov={12}>
-			<OrbitControls enableZoom={true} />
+		<T.PerspectiveCamera
+			makeDefault
+			position={[
+				20 + (m.x / innerWidth) * 0.3,
+				20 + (0.5 - m.y / innerHeight) * 0.3,
+				20 + (1 - m.x / innerWidth) * 0.3
+			]}
+			fov={12}
+		>
+			<OrbitControls enableZoom={false} enabled={false} />
 		</T.PerspectiveCamera>
 
-		<T.DirectionalLight castShadow position={[3, 8, 10]} />
+		<T.DirectionalLight
+			castShadow
+			position={[
+				10 * (m.x / innerWidth),
+				10 * (1 - m.y / innerHeight),
+				10 * (1 - m.x / innerWidth)
+			]}
+		/>
 		<T.AmbientLight intensity={0.2} />
 
-		<Cube animate={$cube3} x={-3} y={7.5} z={4} depth={2} color="green" />
-		<Cube animate={$cube1} x={0} y={8} z={0} />
-		<Cube animate={$cube2} x={4} y={3} />
-		<Cube animate={$cube4} x={2} y={2} z={-2} color="yellow" />
+		<Cube animate={$cube3} x={-3} y={8.5} z={4} depth={2} color="green" />
+		<Cube animate={$cube1} x={-2} y={9} z={0} />
+		<Cube animate={$cube2} x={1} y={5} z={0} color="blue" />
+		<Cube animate={$cube4} x={3} y={8} z={-2} color="yellow" />
+		<Cube animate={$cube5} x={4} y={8} z={-2} color="purple" />
 	</Canvas>
 
-  <div class="title">
-
-  </div>
+	<!-- <div class="firstname-container">
+		<div class={animateFirstname ? 'hide' : 'show'}>
+			<h1>{innerWidth} {innerHeight}</h1>
+		</div>
+	</div>
+	<div class="lastname-container">
+		<div class={animateLastname ? 'hide' : 'show'}>
+			<h1>{m.x} x {m.y}</h1>
+		</div>
+	</div> -->
+	<div class="firstname-container">
+		<div class={animateFirstname ? 'hide' : 'show'}>
+			<h1>SANTIAGO</h1>
+		</div>
+	</div>
+	<div class="lastname-container">
+		<div class={animateLastname ? 'hide' : 'show'}>
+			<h1>NAVAS</h1>
+		</div>
+	</div>
 </div>
 
 <style>
@@ -57,5 +116,36 @@
 		justify-content: center;
 		width: 100vw;
 		height: 100vh;
+	}
+
+	h1 {
+		font-family: Urbanist, sans-serif;
+		font-size: 120px;
+		letter-spacing: 6px;
+		margin: -4px;
+	}
+
+	.firstname-container {
+		top: 5%;
+		left: 10%;
+		position: absolute;
+		overflow: hidden;
+	}
+
+	.lastname-container {
+		top: 17%;
+		left: 43%;
+		position: absolute;
+		overflow: hidden;
+	}
+
+	.hide {
+		transform: translateY(0%);
+		transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+	}
+
+	.show {
+		transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+		transform: translateY(-100%);
 	}
 </style>

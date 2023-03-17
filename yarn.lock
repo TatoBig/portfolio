@@ -139,6 +139,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@fontsource/urbanist@^4.5.17":
+  version "4.5.17"
+  resolved "https://registry.yarnpkg.com/@fontsource/urbanist/-/urbanist-4.5.17.tgz#ac3c99e4c54a12d8f9220a12c9aedfc295ff5cab"
+  integrity sha512-zE3a23W/l038Ty7btpUC4mKoD7d3c4CqOkX89agNC/nUGctjalA7FlWvnQAbzP65ZmWc20aBueGMeCQmfJQ+cA==
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
