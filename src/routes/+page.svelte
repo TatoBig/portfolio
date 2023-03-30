@@ -4,26 +4,20 @@
 </script>
 
 <main>
-	<Section>
-		<div class="main-name">
-			<AnimatedText>
-				<h1>Santiago Navas</h1>
-			</AnimatedText>
-		</div>
-	</Section>
-	<Section>
-		<h1 class="b">content</h1>
-	</Section>
+	<div class="container">
+		<AnimatedText>
+			<div class="main-name">Santiago Navas</div>
+		</AnimatedText>
+	</div>
 </main>
 
 <style>
 	.main-name {
-		font-size: 4rem;
-		background-color: blue;
+		font-size: 10rem;
 	}
-
-	.b {
-		background-color: red;
-		height: 100%;
+	.container {
+		width: 20vw;
+		height: 100vh;
+		background-color: blue;
 	}
 </style>
