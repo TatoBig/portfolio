@@ -15,6 +15,8 @@
 	let cube4 = CubeSpring()
 	let cube5 = CubeSpring()
 
+	let y: number
+
 	let animateFirstname = false
 	let animateLastname = false
 
@@ -49,10 +51,24 @@
 		$m.x = event.clientX
 		$m.y = event.clientY
 	}
+
+	const handleMouseWheel = (e) => {
+		console.log(e)
+		if (e.wheelDeltaY > 0) {
+			alert("up")
+		} else {
+			alert("down")
+		}
+	}
+	
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
-<div class="container" on:mousemove={handleMousemove}>
+<svelte:window bind:innerWidth bind:innerHeight bind:scrollY={y} />
+<div
+	class="container"
+	on:mousemove={handleMousemove}
+	on:mousewheel={handleMouseWheel}
+>
 	<Canvas>
 		<PerspectiveCamera
 			position={{
@@ -93,7 +109,7 @@
 	</div>
 	<div class="lastname-container">
 		<AnimatedText delay={3}>
-			<h1>NAVAS</h1>
+			<h1>{y}</h1>
 		</AnimatedText>
 	</div>
 </div>
