@@ -27,7 +27,6 @@
 	</div>
 </div> -->
 <style>
-	
 	.show {
 		background-color: blueviolet;
 		transform: translateX(0%);

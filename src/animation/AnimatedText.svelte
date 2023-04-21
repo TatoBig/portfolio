@@ -2,13 +2,31 @@
 	import { onMount } from 'svelte'
 
 	export let delay: number = 1
+	export let hide: boolean = false
+	export let controlled: boolean | undefined = false
+	$: hideAnimation(hide)
 
 	let animate = false
-	
+	let animationTimeout: NodeJS.Timeout
+
+	const hideAnimation = (hide: boolean) => {
+		console.log(hide)
+		if (hide) {
+			animate = false
+			if (animationTimeout) clearTimeout(animationTimeout)
+		} else {
+			animationTimeout = setTimeout(() => {
+				animate = true
+			}, delay * 1000)
+		}
+	}
+
 	onMount(() => {
-		setTimeout(() => {
-			animate = true
-		}, delay * 1000)
+		if (!controlled) {
+			setTimeout(() => {
+				animate = true
+			}, delay * 1000)
+		}
 	})
 </script>
 
