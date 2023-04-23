@@ -10,7 +10,6 @@
 	let animationTimeout: NodeJS.Timeout
 
 	const hideAnimation = (hide: boolean) => {
-		console.log(hide)
 		if (hide) {
 			animate = false
 			if (animationTimeout) clearTimeout(animationTimeout)

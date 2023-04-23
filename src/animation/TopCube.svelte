@@ -1,20 +1,16 @@
 <script lang="ts">
 	import { HTML } from '@threlte/extras'
 	import { T } from '@threlte/core'
-	import type { ColorRepresentation, EulerOrder } from 'three'
+	import type { ColorRepresentation } from 'three'
 
 	export let color: ColorRepresentation | [color: ColorRepresentation] | undefined = 'red'
-	export let animate: number
+	export let animate: number = 1
 	export let x: number = 0
 	let y: number = 8
 	export let z: number = 0
 	export let width: number = 1
 	export let depth: number = 1
-	export let face: 'left' | 'right' | 'top' = 'right'
-	export let rotation:
-		| number
-		| [x: number, y: number, z: number, order?: EulerOrder | undefined]
-		| undefined = [0, 0, 0]
+	export let rotate: boolean = false
 </script>
 
 <T.Group>
@@ -24,12 +20,12 @@
 		position.z={z}
 		castShadow
 		let:ref
-		{rotation}
+		rotation={[-1.58, 0, rotate ? 1.5 : 0]}
 	>
-		<T.BoxGeometry args={[width * 0.75, animate, depth * 0.75]} />
+		<T.BoxGeometry args={[width * 0.75, depth * 0.75, animate]} />
 		<T.MeshStandardMaterial {color} />
-		<HTML transform position={{ z: 0.75 / 2 }}>
-			<div class="face" style={`width: ${30 * width}px; height: ${40 * animate}px`}>
+		<HTML transform position={{ z: animate / 2 }}>
+			<div class="face">
 				<slot />
 			</div>
 		</HTML>

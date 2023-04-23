@@ -1,18 +1,19 @@
 <script lang="ts">
 	import '@fontsource/urbanist'
 	import { Canvas } from '@threlte/core'
+	import { onMount } from 'svelte'
+	import { T, OrbitControls, PerspectiveCamera } from '@threlte/core'
 	import { writable } from 'svelte/store'
+	import AboutScene from '@components/scenes/AboutScene.svelte'
 	import AnimatedText from '@animation/AnimatedText.svelte'
 	import NameScene from '@components/scenes/NameScene.svelte'
-	import AboutScene from '@components/scenes/AboutScene.svelte'
-	import { T, OrbitControls, PerspectiveCamera } from '@threlte/core'
-	import { onMount } from 'svelte'
+	import WorksScene from '@components/scenes/WorksScene.svelte'
+  import Menu from '@components/Menu.svelte'
 
 	let currentScene = 0
 	let mouse = writable({ x: 0, y: 0 })
 	let innerWidth = 0
 	let innerHeight = 0
-	let active = false
 	let disabledScrolling = false
 
 	onMount(() => {
@@ -40,11 +41,11 @@
 			}
 		}
 	}
-
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
-<div class="container" on:mousemove={handleMousemove} on:mousewheel={handleMouseWheel}>
+<!-- <div class="container" on:mousemove={handleMousemove} on:mousewheel={handleMouseWheel}> -->
+<div class="container">
 	<Canvas>
 		<PerspectiveCamera
 			position={{
@@ -55,7 +56,7 @@
 			fov={12}
 			lookAt={{}}
 		>
-			<OrbitControls enableZoom={false} enabled={false} />
+			<OrbitControls enableZoom={true} enabled={true} />
 		</PerspectiveCamera>
 
 		<T.DirectionalLight
@@ -70,6 +71,7 @@
 
 		<NameScene active={currentScene === 0} />
 		<AboutScene active={currentScene === 1} />
+		<WorksScene active={currentScene === 2} />
 	</Canvas>
 
 	<div class="firstname-container">
@@ -82,21 +84,26 @@
 			<h1>NAVAS</h1>
 		</AnimatedText>
 	</div>
+
+	<div class="menu">
+		<Menu />
+	</div>
 </div>
 
 <style>
+	.menu {
+		position: absolute;
+		width: 10%;
+		top: 0;
+		right: 2%;
+	}
+
 	h1 {
 		font-family: Urbanist, sans-serif;
-		font-size: 120px;
+		font-size: 15vh;
 		letter-spacing: 6px;
 		font-weight: 500;
 		margin: -4px;
-	}
-
-	.button {
-		position: absolute;
-		top: 0;
-		right: 0;
 	}
 
 	.container {

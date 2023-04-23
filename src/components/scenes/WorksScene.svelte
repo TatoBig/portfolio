@@ -4,13 +4,14 @@
 	import TopCube from '@animation/TopCube.svelte'
 	import type { Spring } from 'svelte/motion'
 	import type CubeProperties from 'src/types/CubeProperties'
+  import TopCubeLink from '@animation/TopCubeLink.svelte'
 
 	export let active: boolean
 	$: active ? triggerAnimation() : hideAnimation()
 
 	let cubeTimeouts: NodeJS.Timeout[] = []
-	const height = [11, 7, 7, 9]
-	const cubes: CubeProperties[] = [1, 1.2, 0.7, 1.4].map((cube, index) => ({
+	const height = [16, 11.5, 11.5, 11.5]
+	const cubes: CubeProperties[] = [1, 2, 2, 2].map((cube, index) => ({
 		timing: cube,
 		height: height[index],
 		spring: CubeSpring()
@@ -41,12 +42,18 @@
 </script>
 
 <div>
-	<TopCube animate={$cube0} x={5} z={-1} width={3} color="green">
-		<AnimatedText delay={0}><span class="cube-text">ABOUT ME</span></AnimatedText>
+	<TopCube animate={$cube0} x={4} z={10} width={3} color="red" rotate>
+		<AnimatedText delay={0}><span class="cube-text">WORKS</span></AnimatedText>
 	</TopCube>
-	<TopCube animate={$cube1} x={-2} z={3} width={3} color="blue" rotate />
-	<TopCube animate={$cube2} x={-6} z={4} width={1} color="black" />
-	<TopCube animate={$cube3} x={1} z={-1} width={1} color="red" />
+	<TopCubeLink animate={$cube1} x={7} z={3} width={3} color="red" >
+		<AnimatedText delay={0}><span class="cube-text">OONEE</span></AnimatedText>
+  </TopCubeLink>
+	<TopCubeLink animate={$cube2} x={6} z={4.5} width={3.5} color="red">
+		<AnimatedText delay={0}><span class="cube-text">ROBUSTO</span></AnimatedText>
+  </TopCubeLink>
+	<TopCubeLink animate={$cube3} x={5} z={6} width={3} color="red">
+		<AnimatedText delay={0}><span class="cube-text">GABRIEL</span></AnimatedText>
+  </TopCubeLink>
 </div>
 
 <style>

@@ -1,60 +1,56 @@
 <script lang="ts">
 	import { CubeSpring } from '@animation/CubeSpring'
-	import { onMount } from 'svelte'
-	import { T, OrbitControls, PerspectiveCamera } from '@threlte/core'
 	import AnimatedText from '@animation/AnimatedText.svelte'
 	import Cube from '@animation/Cube.svelte'
-	import type { Writable } from 'svelte/store'
+  import type CubeProperties from 'src/types/CubeProperties'
 
 	export let active: boolean
-	$: runScene(active)
+	$: active ? triggerAnimation() : hideAnimation()
 
-	let cube1 = CubeSpring()
-	let cube2 = CubeSpring()
-	let cube3 = CubeSpring()
-	let cube4 = CubeSpring()
-	let cube5 = CubeSpring()
+	let cubeTimeouts: NodeJS.Timeout[] = []
+	const height = [8, 8, 10, 11, 8]
+	const cubes: CubeProperties[] = [0.6, 1.2, 1, 1.6, 1.1].map((cube, index) => ({
+		timing: cube,
+		height: height[index],
+		spring: CubeSpring()
+	}))
 
-	const runScene = (active: boolean) => {
-		if (active) {
-			triggerAnimation()
-		} else {
-			$cube1 = 0
-			$cube2 = 0
-			$cube3 = 0
-			$cube4 = 0
-			$cube5 = 0
-		}
+	$: cube1 = cubes[0].spring
+	$: cube2 = cubes[1].spring
+	$: cube3 = cubes[2].spring
+	$: cube4 = cubes[3].spring
+	$: cube5 = cubes[4].spring
+
+	const hideAnimation = () => {
+		cubes.forEach((cube, index) => {
+			cube.spring.set(0)
+			clearTimeout(cubeTimeouts[index])
+		})
+		cubeTimeouts = []
+
 	}
 
 	const triggerAnimation = () => {
-		setTimeout(() => {
-			$cube1 = 8
-		}, 600)
-		setTimeout(() => {
-			$cube2 = 8
-		}, 1200)
-		setTimeout(() => {
-			$cube3 = 10
-		}, 1000)
-		setTimeout(() => {
-			$cube4 = 11
-		}, 1600)
-		setTimeout(() => {
-			$cube5 = 8
-		}, 1100)
+		for (const cube of cubes) {
+			cubeTimeouts.push(
+				setTimeout(() => {
+					cube.spring.set(cube.height)
+				}, cube.timing * 1000)
+			)
+		}		
 	}
+	
 </script>
 
 <div>
-	<Cube animate={$cube3} x={-3} y={8.5} z={4} width={3} color="green" rotation={[0, 1.5, 0]}>
+	<Cube animate={$cube3} x={-3} z={4} width={3} color="green" rotation={[0, 1.5, 0]}>
 		<AnimatedText delay={3.8}><span class="cube-text">FULLSTACK</span></AnimatedText>
 		<AnimatedText delay={4}><span class="cube-text">DEVELOPER</span></AnimatedText>
 	</Cube>
-	<Cube animate={$cube1} x={-2} y={9} z={0} />
-	<Cube animate={$cube2} x={1} y={7} z={0} color="blue" />
-	<Cube animate={$cube4} x={3} y={8} z={-2} color="yellow" />
-	<Cube animate={$cube5} x={4} y={8} z={-2} color="purple" />
+	<Cube animate={$cube1} x={-2} z={0} />
+	<Cube animate={$cube2} x={1} z={0} color="blue" />
+	<Cube animate={$cube4} x={3} z={-2} color="yellow" />
+	<Cube animate={$cube5} x={4} z={-2} color="purple" />
 </div>
 
 <style>
