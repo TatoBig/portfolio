@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '@fontsource/urbanist'
-	import { Canvas } from '@threlte/core'
+	import { Canvas, Fog } from '@threlte/core'
 	import { onMount } from 'svelte'
 	import { T, OrbitControls, PerspectiveCamera } from '@threlte/core'
 	import { writable } from 'svelte/store'
@@ -8,13 +8,19 @@
 	import AnimatedText from '@animation/AnimatedText.svelte'
 	import NameScene from '@components/scenes/NameScene.svelte'
 	import WorksScene from '@components/scenes/WorksScene.svelte'
-  import Menu from '@components/Menu.svelte'
+	import Menu from '@components/Menu.svelte'
+	import { tweened } from 'svelte/motion'
+	import { cubicOut } from 'svelte/easing'
+	import { goto } from '$app/navigation'
+	import { ContactShadows, Grid } from '@threlte/extras'
+  import Background from '@components/assets/Background.svelte'
 
 	let currentScene = 0
 	let mouse = writable({ x: 0, y: 0 })
 	let innerWidth = 0
 	let innerHeight = 0
 	let disabledScrolling = false
+	let transitioning = false
 
 	onMount(() => {
 		disabledScrolling = true
@@ -24,12 +30,14 @@
 	})
 
 	const handleMousemove = (event: any) => {
-		$mouse.x = event.clientX
-		$mouse.y = event.clientY
+		if (!transitioning) {
+			$mouse.x = event.clientX
+			$mouse.y = event.clientY
+		}
 	}
 
 	const handleMouseWheel = (e: any) => {
-		if (!disabledScrolling) {
+		if (!disabledScrolling && !transitioning) {
 			disabledScrolling = true
 			setTimeout(() => {
 				disabledScrolling = false
@@ -41,22 +49,59 @@
 			}
 		}
 	}
+
+	const cameraX = tweened(0, {
+		duration: 2000,
+		easing: cubicOut
+	})
+	const cameraY = tweened(0, {
+		duration: 2000,
+		easing: cubicOut
+	})
+	const cameraZ = tweened(0, {
+		duration: 2000,
+		easing: cubicOut
+	})
+	const positionX = tweened(15, {
+		duration: 2000,
+		easing: cubicOut
+	})
+	const positionZ = tweened(15, {
+		duration: 4000,
+		easing: cubicOut
+	})
+	const positionY = tweened(15, {
+		duration: 3000,
+		easing: cubicOut
+	})
+
+	const trigger = (pos: number[], page: string) => {
+		transitioning = true
+		positionX.set(pos[0])
+		positionY.set(pos[1])
+		positionZ.set(pos[2])
+		cameraY.set(pos[3])
+		cameraX.set(pos[4])
+		setTimeout(() => {
+			goto(page)
+		}, 3000)
+	}
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
-<!-- <div class="container" on:mousemove={handleMousemove} on:mousewheel={handleMouseWheel}> -->
-<div class="container">
+<div class="container" on:mousemove={handleMousemove} on:mousewheel={handleMouseWheel} on:dragenter={(e) => console.log(e)}>
+	<!-- <div class="container"> -->
 	<Canvas>
 		<PerspectiveCamera
 			position={{
-				x: (15 + $mouse.x / innerWidth) * 1.5,
-				z: (15 + (1 - $mouse.x / innerWidth)) * 1.5,
-				y: (15 + (0.5 - $mouse.y / innerHeight)) * 1.5
+				x: ($positionX + $mouse.x / innerWidth) * 1.5,
+				z: ($positionZ + (1 - $mouse.x / innerWidth)) * 1.5,
+				y: ($positionY + (0.5 - $mouse.y / innerHeight)) * 1.5
 			}}
 			fov={12}
-			lookAt={{}}
+			lookAt={{ y: $cameraY, x: $cameraX, z: $cameraZ }}
 		>
-			<OrbitControls enableZoom={true} enabled={true} />
+			<OrbitControls enableZoom={false} enabled={false} />
 		</PerspectiveCamera>
 
 		<T.DirectionalLight
@@ -69,9 +114,11 @@
 		/>
 		<T.AmbientLight intensity={0.2} />
 
+		<Background color="#F5F5F5" />
+
 		<NameScene active={currentScene === 0} />
 		<AboutScene active={currentScene === 1} />
-		<WorksScene active={currentScene === 2} />
+		<WorksScene active={currentScene === 2} moveCamera={trigger} />
 	</Canvas>
 
 	<div class="firstname-container">
@@ -84,26 +131,13 @@
 			<h1>NAVAS</h1>
 		</AnimatedText>
 	</div>
-
-	<div class="menu">
-		<Menu />
-	</div>
 </div>
 
 <style>
-	.menu {
-		position: absolute;
-		width: 10%;
-		top: 0;
-		right: 2%;
-	}
-
-	h1 {
-		font-family: Urbanist, sans-serif;
-		font-size: 15vh;
-		letter-spacing: 6px;
-		font-weight: 500;
-		margin: -4px;
+	.test {
+		background-color: black;
+		width: 100vw;
+		height: 100vh;
 	}
 
 	.container {

@@ -1,6 +1,8 @@
 <script lang="ts">
 	// import ASScroll from '@ashthornton/asscroll'
 	import { onMount } from 'svelte'
+	import '../app.css'
+	import Menu from '@components/Menu.svelte'
 
 	let show = true
 
@@ -17,6 +19,9 @@
 	})
 </script>
 
+<div class="menu">
+	<Menu />
+</div>
 <slot />
 
 <!-- <div class="layout-container">
@@ -27,6 +32,13 @@
 	</div>
 </div> -->
 <style>
+	.menu {
+		position: absolute;
+		width: 10%;
+		top: 0;
+		right: 0%;
+	}
+
 	.show {
 		background-color: blueviolet;
 		transform: translateX(0%);

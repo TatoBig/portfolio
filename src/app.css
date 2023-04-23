@@ -1,0 +1,19 @@
+
+@media (min-width: 768px) {
+	h1 {
+    font-family: Urbanist, sans-serif;
+    font-size: 15vh;
+    letter-spacing: 6px;
+    font-weight: 500;
+    margin: -4px;
+  }
+}
+
+h1 {
+  font-family: Urbanist, sans-serif;
+  font-size: 7vh;
+  letter-spacing: 2px;
+  font-weight: 500;
+  margin: 2px;
+}
+

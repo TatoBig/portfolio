@@ -41,7 +41,7 @@
 </script>
 
 <div>
-	<TopCube animate={$cube0} x={5} z={-1} width={3} color="green">
+	<TopCube animate={$cube0} x={5} z={-1} width={4} color="green">
 		<AnimatedText delay={0}><span class="cube-text">ABOUT ME</span></AnimatedText>
 	</TopCube>
 	<TopCube animate={$cube1} x={-2} z={3} width={3} color="blue" rotate />

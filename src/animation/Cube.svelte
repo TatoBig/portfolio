@@ -17,7 +17,7 @@
 		| undefined = [0, 0, 0]
 </script>
 
-<T.Group>
+<T.Group visible={animate === 0 ? false : true}>
 	<T.Mesh
 		position.y={animate * 0.5 - y}
 		position.x={x}

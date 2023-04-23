@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Canvas, T, PerspectiveCamera, OrbitControls, InteractiveObject } from '@threlte/core'
-  import { HTML } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
 
+	export let trigger: any
 	const scale = spring(1)
 </script>
 
@@ -30,7 +30,7 @@
 				interactive
 				on:pointerenter={() => ($scale = 1.4)}
 				on:pointerleave={() => ($scale = 1)}
-				on:click={() => console.log('router.push(')}
+				on:click={() => trigger()}
 			/>
 		</T.Mesh>
 	</T.Group>
