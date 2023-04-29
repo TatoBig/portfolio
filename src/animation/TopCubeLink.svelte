@@ -16,9 +16,19 @@
 	export let width: number = 1
 	export let depth: number = 1
 	export let rotate: boolean = false
-	export let name: string
+	export let alreadyActive: boolean = false
 
-	const upside = spring(0)
+	$: deactive(alreadyActive)
+
+	const deactive = (alreadyActive: boolean) => {
+		if (alreadyActive) {
+			setTimeout(() => {
+				$upside = 0
+			}, 2000);
+		}
+	}
+
+	const upside = spring(alreadyActive ? 2 : 0)
 	let active = false
 </script>
 
@@ -35,7 +45,7 @@
 			object={ref}
 			interactive
 			on:pointerenter={() => ($upside = 2)}
-			on:pointerleave={() => !active ? ($upside = 0) : undefined}
+			on:pointerleave={() => (!active && !alreadyActive ? ($upside = 0) : undefined)}
 			on:click={() => {
 				active = true
 				$upside = 2
@@ -52,7 +62,7 @@
 		<HTML
 			transform
 			pointerEvents="none"
-			position={{ z: (animate + $upside) / 1.8 - 1.3, x: width / 2.65 }}
+			position={{ z: (animate + $upside) / 1.8 - 1.3, x: (width / 2.65) * (rotate ? -1 : 1) }}
 			rotation={{ y: 1.5, x: 1.585, z: 0 }}
 		>
 			<div class="face">

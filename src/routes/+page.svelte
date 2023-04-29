@@ -5,28 +5,126 @@
 	import { T, OrbitControls, PerspectiveCamera } from '@threlte/core'
 	import { writable } from 'svelte/store'
 	import AboutScene from '@components/scenes/AboutScene.svelte'
-	import AnimatedText from '@animation/AnimatedText.svelte'
 	import NameScene from '@components/scenes/NameScene.svelte'
 	import WorksScene from '@components/scenes/WorksScene.svelte'
-	import Menu from '@components/Menu.svelte'
-	import { tweened } from 'svelte/motion'
+	import { tweened, type Tweened } from 'svelte/motion'
 	import { cubicOut } from 'svelte/easing'
 	import { goto } from '$app/navigation'
-	import { ContactShadows, Grid } from '@threlte/extras'
-  import Background from '@components/assets/Background.svelte'
+	import Background from '@components/assets/Background.svelte'
+	import ProjectsScene from '@components/scenes/ProjectsScene.svelte'
+	import NameContent from '@components/content/NameContent.svelte'
+	import Url from '@components/tools/Url'
+	import ContactScene from '@components/scenes/ContactScene.svelte'
+	import { currentScene } from '@components/tools/Stores'
 
-	let currentScene = 0
 	let mouse = writable({ x: 0, y: 0 })
 	let innerWidth = 0
 	let innerHeight = 0
 	let disabledScrolling = false
 	let transitioning = false
+	let alreadyActive = 0
+
+	let cameraX: Tweened<number>
+	let cameraY: Tweened<number>
+	let cameraZ: Tweened<number>
+	let positionX: Tweened<number>
+	let positionY: Tweened<number>
+	let positionZ: Tweened<number>
+
+	$: changeCurrentScene($Url?.hash ?? '/')
+
+	const changeCurrentScene = (hash: string) => {
+		if (!transitioning) {
+			console.log(hash)
+			switch (hash) {
+				case '#works/gabriel':
+					initCamera([5, 5, 5, 4, 5, 2])
+					alreadyActive = 1
+					$currentScene = 2
+					setTimeout(() => {
+						moveCamera([15, 15, 15, 0, 0, 0])
+						alreadyActive = 0
+					}, 500)
+					break
+				case '#works/robusto':
+					initCamera([6, 4.2, 5, 4, 5, 2])
+					alreadyActive = 2
+					$currentScene = 2
+					setTimeout(() => {
+						moveCamera([15, 15, 15, 0, 0, 0])
+						alreadyActive = 0
+					}, 500)
+					break
+					// [4, 3.4, 2, 4, 3.4, 2]
+				case '#works/oonee':
+					initCamera([6.7,4 , 2, 5, 3, 4])
+					alreadyActive = 3
+					$currentScene = 2
+					setTimeout(() => {
+						moveCamera([15, 15, 15, 0, 0, 0])
+						alreadyActive = 0
+					}, 500)
+					break
+				case '#works':
+					$currentScene = 2
+					initCamera()
+					break
+				case '':
+					$currentScene = 0
+					initCamera()
+					break
+				case '#about':
+					$currentScene = 1
+					initCamera()
+					break
+				case '#projects':
+					$currentScene = 3
+					initCamera()
+					break
+				case '#contact':
+					$currentScene = 4
+					initCamera()
+					break
+				default:
+					$currentScene = 0
+					initCamera()
+					break
+			}
+		}
+	}
+
+	const initCamera = (pos: number[] = [0, 0, 0, 15, 15, 15]) => {
+		cameraX = tweened(pos[0], {
+			duration: 2000,
+			easing: cubicOut
+		})
+		cameraY = tweened(pos[1], {
+			duration: 2000,
+			easing: cubicOut
+		})
+		cameraZ = tweened(pos[2], {
+			duration: 2000,
+			easing: cubicOut
+		})
+		positionX = tweened(pos[3], {
+			duration: 2000,
+			easing: cubicOut
+		})
+		positionZ = tweened(pos[4], {
+			duration: 3000,
+			easing: cubicOut
+		})
+		positionY = tweened(pos[5], {
+			duration: 4000,
+			easing: cubicOut
+		})
+	}
 
 	onMount(() => {
 		disabledScrolling = true
 		setTimeout(() => {
 			disabledScrolling = false
-		}, 4000)
+		}, 3000)
 	})
 
 	const handleMousemove = (event: any) => {
@@ -43,53 +141,60 @@
 				disabledScrolling = false
 			}, 1000)
 			if (e.wheelDeltaY > 0) {
-				currentScene--
+				$currentScene--
 			} else {
-				currentScene++
+				$currentScene++
+			}
+			switch ($currentScene) {
+				case 0:
+					goto('/')
+					break
+				case 1:
+					goto('#about')
+					break
+				case 2:
+					goto('#works')
+					break
+				case 3:
+					goto('#projects')
+					break
+				case 4:
+					goto('#contact')
+				default:
+					break
 			}
 		}
 	}
 
-	const cameraX = tweened(0, {
-		duration: 2000,
-		easing: cubicOut
-	})
-	const cameraY = tweened(0, {
-		duration: 2000,
-		easing: cubicOut
-	})
-	const cameraZ = tweened(0, {
-		duration: 2000,
-		easing: cubicOut
-	})
-	const positionX = tweened(15, {
-		duration: 2000,
-		easing: cubicOut
-	})
-	const positionZ = tweened(15, {
-		duration: 4000,
-		easing: cubicOut
-	})
-	const positionY = tweened(15, {
-		duration: 3000,
-		easing: cubicOut
-	})
-
-	const trigger = (pos: number[], page: string) => {
+	const moveCamera = (pos: number[], page?: string) => {
 		transitioning = true
-		positionX.set(pos[0])
-		positionY.set(pos[1])
-		positionZ.set(pos[2])
-		cameraY.set(pos[3])
-		cameraX.set(pos[4])
-		setTimeout(() => {
-			goto(page)
-		}, 3000)
+		positionX.set(pos[0] ?? 15)
+		positionY.set(pos[1] ?? 15)
+		positionZ.set(pos[2] ?? 15)
+		cameraX.set(pos[3] ?? 0)
+		cameraY.set(pos[4] ?? 0)
+		cameraZ.set(pos[5] ?? 0)
+
+		if (page) {
+			goto(page.replace('/', '#'))
+			setTimeout(() => {
+				goto(page)
+			}, 3000)
+		} else {
+			setTimeout(() => {
+				transitioning = false
+			}, 3000)
+		}
 	}
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
-<div class="container" on:mousemove={handleMousemove} on:mousewheel={handleMouseWheel} on:dragenter={(e) => console.log(e)}>
+<div
+	class="container"
+	on:mousemove={handleMousemove}
+	on:mousewheel={handleMouseWheel}
+	on:dragenter={(e) => console.log(e)}
+>
 	<!-- <div class="container"> -->
 	<Canvas>
 		<PerspectiveCamera
@@ -116,47 +221,31 @@
 
 		<Background color="#F5F5F5" />
 
-		<NameScene active={currentScene === 0} />
-		<AboutScene active={currentScene === 1} />
-		<WorksScene active={currentScene === 2} moveCamera={trigger} />
+		<NameScene active={$currentScene === 0} />
+		<AboutScene active={$currentScene === 1} />
+		<WorksScene active={$currentScene === 2} {moveCamera} {alreadyActive} />
+		<ProjectsScene active={$currentScene === 3} {moveCamera} />
+		<ContactScene active={$currentScene === 4} />
+
+		<!-- <T.Mesh position.y={4} position.x={5} position.z={6}>
+				<T.BoxGeometry args={[1, 1, 1]} />
+				<T.MeshStandardMaterial color="green" />
+			</T.Mesh> -->
+		<!-- <T.Mesh position.y={4} position.x={6} position.z={4}>
+				<T.BoxGeometry args={[1, 1, 1]} />
+				<T.MeshStandardMaterial color="blue" />
+			</T.Mesh> -->
 	</Canvas>
 
-	<div class="firstname-container">
-		<AnimatedText delay={2.8} hide={currentScene !== 0} controlled>
-			<h1>SANTIAGO</h1>
-		</AnimatedText>
-	</div>
-	<div class="lastname-container">
-		<AnimatedText delay={3} hide={currentScene !== 0} controlled>
-			<h1>NAVAS</h1>
-		</AnimatedText>
-	</div>
+	<NameContent active={$currentScene === 0} />
 </div>
 
 <style>
-	.test {
-		background-color: black;
-		width: 100vw;
-		height: 100vh;
-	}
-
 	.container {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 100vw;
 		height: 100vh;
-	}
-
-	.firstname-container {
-		top: 5%;
-		left: 10%;
-		position: absolute;
-	}
-
-	.lastname-container {
-		top: 17%;
-		left: 43%;
-		position: absolute;
 	}
 </style>

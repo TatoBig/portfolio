@@ -44,8 +44,8 @@
 
 <div>
 	<Cube animate={$cube3} x={-3} z={4} width={3} color="green" rotation={[0, 1.5, 0]}>
-		<AnimatedText delay={3.8}><span class="cube-text">FULLSTACK</span></AnimatedText>
-		<AnimatedText delay={4}><span class="cube-text">DEVELOPER</span></AnimatedText>
+		<AnimatedText controlled hide={!active} delay={2}><span class="cube-text">FULLSTACK</span></AnimatedText>
+		<AnimatedText controlled hide={!active} delay={2.3}><span class="cube-text">DEVELOPER</span></AnimatedText>
 	</Cube>
 	<Cube animate={$cube1} x={-2} z={0} />
 	<Cube animate={$cube2} x={1} z={0} color="blue" />

@@ -2,7 +2,8 @@
 	import { Canvas, T, PerspectiveCamera, OrbitControls, InteractiveObject } from '@threlte/core'
 	import { spring } from 'svelte/motion'
 
-	export let trigger: any
+	export let openMenu: () => void
+
 	const scale = spring(1)
 </script>
 
@@ -30,7 +31,7 @@
 				interactive
 				on:pointerenter={() => ($scale = 1.4)}
 				on:pointerleave={() => ($scale = 1)}
-				on:click={() => trigger()}
+				on:click={() => openMenu()}
 			/>
 		</T.Mesh>
 	</T.Group>

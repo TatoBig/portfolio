@@ -3,8 +3,11 @@
 	import { onMount } from 'svelte'
 	import '../app.css'
 	import Menu from '@components/Menu.svelte'
+	import { currentScene } from '@components/tools/Stores'
 
 	let show = true
+	let menu = false
+	let sceneOnClose: number
 
 	// const initialFunction = () => {
 	// 	const asscroll = new ASScroll()
@@ -17,12 +20,26 @@
 			show = false
 		}, 1000)
 	})
+
+	const openMenu = () => {
+		if (!menu) {
+			menu = true
+			sceneOnClose = $currentScene
+			$currentScene = -1
+		} else {
+			menu = false
+			$currentScene = sceneOnClose
+		}
+	}
 </script>
 
-<div class="menu">
-	<Menu />
+<div class="layout">
+	<div class={`menu-screen ${menu ? 'open' : 'closed'}`} />
+	<div class="menu-button">
+		<Menu {openMenu} />
+	</div>
+	<slot />
 </div>
-<slot />
 
 <!-- <div class="layout-container">
 	<div class={(show ? 'show' : 'hide') + ' page-transition'}>
@@ -32,36 +49,36 @@
 	</div>
 </div> -->
 <style>
-	.menu {
+	.layout {
+		overflow: hidden;
+		width: 100vw;
+		height: 100vh;
+		position: relative;
+	}
+
+	.menu-button {
 		position: absolute;
 		width: 10%;
 		top: 0;
 		right: 0%;
+		z-index: 10;
 	}
 
-	.show {
-		background-color: blueviolet;
-		transform: translateX(0%);
-	}
-
-	.hide {
+	.closed {
 		transform: translateX(100%);
-		background-color: blueviolet;
 	}
 
-	.page-transition {
-		align-items: center;
-		display: flex;
-		height: 100vh;
-		justify-content: center;
-		position: fixed;
-		transition: transform 1.1s cubic-bezier(0, 0, 0, 0.995); /* custom */
+	.open {
+		transform: translateY(0%);
+	}
+
+	.menu-screen {
+		position: absolute;
+		z-index: 5;
+		background-color: red;
 		width: 100vw;
-		z-index: 100;
-	}
-
-	.layout-container {
-		overflow: hidden;
-		background-color: beige;
+		height: 100vh;
+		top: 0;
+		left: 0;
 	}
 </style>
