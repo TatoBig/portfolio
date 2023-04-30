@@ -2,7 +2,7 @@
 	import { HTML, useCursor } from '@threlte/extras'
 	import { InteractiveObject, T } from '@threlte/core'
 	import type { ColorRepresentation } from 'three'
-	import Arrow from '@components/assets/Arrow.svelte'
+	import Arrow from '@assets/Arrow.svelte'
 	import { spring } from 'svelte/motion'
 	import { writable } from 'svelte/store'
 	import { Editable } from '@threlte/theatre'
@@ -18,6 +18,7 @@
 	export let depth: number = 1
 	export let rotate: boolean = false
 	export let alreadyActive: boolean = false
+	export let customText: string = ''
 
 	$: deactive(alreadyActive)
 
@@ -47,7 +48,7 @@
 			object={ref}
 			on:pointerenter={() => {
 				$upside = 2
-				hover({ size: 30 })
+				hover({ size: customText !== '' ? 45 : 30, text: customText })
 			}}
 			on:pointerleave={() => {
 				!active && !alreadyActive ? ($upside = 0) : undefined

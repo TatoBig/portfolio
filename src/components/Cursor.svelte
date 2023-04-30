@@ -32,7 +32,7 @@
 	}}
 />
 
-<svg class="w-full h-full">
+<svg class="w-full h-full cursor">
 	<circle
 		cx={$coords1.x}
 		cy={$coords1.y}

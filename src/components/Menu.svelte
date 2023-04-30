@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { Canvas, T, PerspectiveCamera, OrbitControls, InteractiveObject } from '@threlte/core'
 	import { hover, hoverExit } from './tools/Hover'
-  import Background from './assets/Background.svelte'
+  import Background from '@assets/Background.svelte'
   import { goto } from '$app/navigation'
 
   export let closeMenu: () => void
-
 
 	const handleClick = (page: string) => {
 		goto(page)
@@ -92,7 +91,7 @@
 			interactive
 			on:pointerenter={() => hover({ text: 'Blog' })}
 			on:pointerleave={() => hoverExit()}
-			on:click={() => handleClick('/#blog')}
+			on:click={() => handleClick('/blog')}
 		/>
 	</T.Mesh>
 

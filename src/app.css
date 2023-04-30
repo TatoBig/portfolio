@@ -33,17 +33,34 @@ h5 {
 	}
 }
 
+h6 {
+	font-family: Urbanist, sans-serif;
+	font-size: 3vh;
+	letter-spacing: 2px;
+	font-weight: 500;
+	margin: 2px;
+}
+
+@media (min-width: 768px) {
+	h6 {
+		font-family: Urbanist, sans-serif;
+		font-size: 3vh;
+		font-weight: 500;
+	}
+}
+
 p {
 	font-family: Manrope, sans-serif;
 	font-size: 3vh;
 	letter-spacing: 2px;
 	margin: 2px;
-	color: white;
+	color: black;
 }
 
 @media (min-width: 768px) {
 	p {
 		font-family: Manrope, sans-serif;
 		font-size: 4vh;
+		letter-spacing: 0px;
 	}
 }

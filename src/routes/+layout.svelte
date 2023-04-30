@@ -3,27 +3,26 @@
 	import { onMount } from 'svelte'
 	import '../app.css'
 	import MenuButton from '@components/MenuButton.svelte'
-	import { currentScene } from '@components/tools/Stores'
+	import { currentScene, isMenuOpen, sm } from '@components/tools/Stores'
 	import Menu from '@components/Menu.svelte'
 	import Cursor from '@components/Cursor.svelte'
-  import { hoverExit } from '@components/tools/Hover'
+	import { hoverExit } from '@components/tools/Hover'
 
-	let show = true
 	let renderMenu = false
 	let animateMenu = false
 	let sceneOnClose: number
+	let innerWidth = 0
+	let innerHeight = 0
 
-	// const initialFunction = () => {
-	// 	const asscroll = new ASScroll()
-	// 	asscroll.enable()
-	// }
+	$: handleBreakpoint(innerWidth)
 
-	onMount(() => {
-		// initialFunction()
-		setTimeout(() => {
-			show = false
-		}, 1000)
-	})
+	const handleBreakpoint = (innerWidth: number) => {
+		if (innerWidth < 768) {
+			$sm = true
+		} else {
+			$sm = false
+		}
+	}
 
 	const openMenu = () => {
 		if (!renderMenu) {
@@ -31,17 +30,20 @@
 			animateMenu = true
 			sceneOnClose = $currentScene
 			$currentScene = -1
+			$isMenuOpen = true
 		} else {
 			animateMenu = false
 			setTimeout(() => {
 				renderMenu = false
 				hoverExit()
 			}, 500)
+			$isMenuOpen = false
 			$currentScene = sceneOnClose
 		}
 	}
 </script>
 
+<svelte:window bind:innerWidth bind:innerHeight />
 <div class="layout">
 	{#if renderMenu}
 		<div class={`menu-screen ${animateMenu ? 'open' : 'closed'}`}>
@@ -55,19 +57,12 @@
 	<Cursor />
 </div>
 
-<!-- <div class="layout-container">
-	<div class={(show ? 'show' : 'hide') + ' page-transition'}>
-		<h1>Title</h1>
-	</div>
-	<div asscroll-container="true">
-	</div>
-</div> -->
 <style>
 	.layout {
-		overflow: hidden;
 		width: 100vw;
 		height: 100vh;
 		position: relative;
+		overflow: hidden;
 	}
 
 	.menu-button {

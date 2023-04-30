@@ -51,7 +51,7 @@
 </script>
 
 <div>
-	<TopCube animate={$cube0} x={1} z={7} width={3} color="red" rotate name="works">
+	<TopCube animate={$cube0} x={1} z={7} width={3} color="red" rotate>
 		<AnimatedText delay={0}><span class="cube-text">WORKS</span></AnimatedText>
 	</TopCube>
 	<TopCubeLink

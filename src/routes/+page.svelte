@@ -1,21 +1,21 @@
 <script lang="ts">
 	import '@fontsource/urbanist'
-	import { Canvas, Fog } from '@threlte/core'
+	import { Canvas } from '@threlte/core'
 	import { cubicOut } from 'svelte/easing'
 	import { currentScene } from '@components/tools/Stores'
 	import { goto } from '$app/navigation'
 	import { onMount } from 'svelte'
 	import { T, OrbitControls, PerspectiveCamera } from '@threlte/core'
-	import { spring, tweened, type Tweened } from 'svelte/motion'
-	import { writable } from 'svelte/store'
+	import { tweened, type Tweened } from 'svelte/motion'
 	import AboutScene from '@components/scenes/AboutScene.svelte'
-	import Background from '@components/assets/Background.svelte'
+	import Background from '@assets/Background.svelte'
 	import ContactScene from '@components/scenes/ContactScene.svelte'
 	import NameContent from '@components/content/NameContent.svelte'
 	import NameScene from '@components/scenes/NameScene.svelte'
 	import ProjectsScene from '@components/scenes/ProjectsScene.svelte'
 	import Url from '@components/tools/Url'
 	import WorksScene from '@components/scenes/WorksScene.svelte'
+  import AboutContent from '@components/content/AboutContent.svelte'
 
 	let mouseX = tweened(0, {
 		duration: 500,
@@ -278,7 +278,6 @@
 		<WorksScene active={$currentScene === 2} {moveCamera} {alreadyActive} />
 		<ProjectsScene active={$currentScene === 3} {moveCamera} />
 		<ContactScene active={$currentScene === 4} />
-		<NameScene active={$currentScene === 5} />
 
 		<!-- <T.Mesh position.y={4} position.x={5} position.z={6}>
 				<T.BoxGeometry args={[1, 1, 1]} />
@@ -291,6 +290,7 @@
 	</Canvas>
 
 	<NameContent active={$currentScene === 0} />
+	<AboutContent active={$currentScene === 1} />
 </div>
 
 <style>

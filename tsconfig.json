@@ -13,6 +13,7 @@
 		"paths": {
 			"@components/*": ["src/components/*"],
 			"@animation/*": ["src/animation/*"],
+			"@assets/*": ["src/assets/*"],
 		}
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias

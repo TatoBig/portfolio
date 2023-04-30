@@ -4,13 +4,19 @@
 	import TopCube from '@animation/TopCube.svelte'
 	import type { Spring } from 'svelte/motion'
 	import type CubeProperties from 'src/types/CubeProperties'
+	import TopCubeLink from '@animation/TopCubeLink.svelte'
+	import GithubIcon from '@assets/icons/GithubIcon.svelte'
+	import { goto } from '$app/navigation'
+	import LinkedinIcon from '@assets/icons/LinkedinIcon.svelte'
+  import GmailIcon from '@assets/icons/GmailIcon.svelte'
+	import { copyText } from 'svelte-copy';
 
 	export let active: boolean
 	$: active ? triggerAnimation() : hideAnimation()
 
 	let cubeTimeouts: NodeJS.Timeout[] = []
-	const height = [11, 7, 7, 9]
-	const cubes: CubeProperties[] = [1, 1.2, 0.7, 1.4].map((cube, index) => ({
+	const height = [11, 9, 7, 9]
+	const cubes: CubeProperties[] = [1, 1.5, 0.7, 1.4].map((cube, index) => ({
 		timing: cube,
 		height: height[index],
 		spring: CubeSpring()
@@ -41,15 +47,55 @@
 </script>
 
 <div>
-	<TopCube animate={$cube0} x={5} z={-1} width={4} color="green">
-		<AnimatedText delay={0}><span class="cube-text">ABOUT ME</span></AnimatedText>
+	<TopCube animate={$cube0} x={2} z={2} width={4} color="yellow" rotate>
+		<AnimatedText delay={0}><span class="cube-text">CONTACT</span></AnimatedText>
 	</TopCube>
-	<TopCube animate={$cube1} x={-2} z={3} width={3} color="blue" rotate />
-	<TopCube animate={$cube2} x={-6} z={4} width={1} color="black" />
-	<TopCube animate={$cube3} x={1} z={-1} width={1} color="red" />
+	<TopCubeLink
+		animate={$cube1}
+		x={3}
+		z={2}
+		width={1}
+		color="white"
+		trigger={() => goto('https://github.com/TatoBig')}
+	>
+		<div class="icon">
+			<GithubIcon />
+		</div>
+	</TopCubeLink>
+
+	<TopCubeLink
+		animate={$cube2}
+		x={-2}
+		z={4}
+		width={1}
+		color="#0072b1"
+		trigger={() => goto('https://www.linkedin.com/in/santiago-navas-682757219/')}
+	>
+		<div class="icon">
+			<LinkedinIcon />
+		</div>
+	</TopCubeLink>
+	<TopCubeLink
+		animate={$cube3}
+		x={4}
+		z={-1}
+		width={1}
+		color="gray"
+		trigger={() => copyText('santiagonavas.dev@gmail.com')}
+		customText="Copy"
+	>
+		<div class="icon">
+			<GmailIcon />
+		</div>
+	</TopCubeLink>
 </div>
 
 <style>
+	.icon {
+		width: 30px;
+		display: flex;
+		justify-content: center;
+	}
 	.cube-text {
 		font-size: 20px;
 		font-family: Urbanist, sans-serif;

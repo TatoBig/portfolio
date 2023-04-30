@@ -7,7 +7,8 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@components': resolve('./src/components/'),
-			'@animation': resolve('./src/animation/')
+			'@animation': resolve('./src/animation/'),
+			'@assets': resolve('./src/assets/')
 		}
 	},
 	ssr: {

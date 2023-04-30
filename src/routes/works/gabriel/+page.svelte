@@ -1,12 +1,12 @@
 <script>
 	import AnimatedText from '@animation/AnimatedText.svelte'
-	import FirebaseIcon from '@components/assets/icons/FirebaseIcon.svelte'
-	import JavascriptIcon from '@components/assets/icons/JavascriptIcon.svelte'
-	import MuiIcon from '@components/assets/icons/MuiIcon.svelte'
-	import NextIcon from '@components/assets/icons/NextIcon.svelte'
-	import ReactIcon from '@components/assets/icons/ReactIcon.svelte'
-	import ReduxIcon from '@components/assets/icons/ReduxIcon.svelte'
-	import TailwindIcon from '@components/assets/icons/TailwindIcon.svelte'
+	import FirebaseIcon from '@assets/icons/FirebaseIcon.svelte'
+	import JavascriptIcon from '@assets/icons/JavascriptIcon.svelte'
+	import MuiIcon from '@assets/icons/MuiIcon.svelte'
+	import NextIcon from '@assets/icons/NextIcon.svelte'
+	import ReactIcon from '@assets/icons/ReactIcon.svelte'
+	import ReduxIcon from '@assets/icons/ReduxIcon.svelte'
+	import TailwindIcon from '@assets/icons/TailwindIcon.svelte'
 	import { hoverExit } from '@components/tools/Hover'
 	import { onMount } from 'svelte'
 
@@ -24,7 +24,12 @@
 	<div class="content">
 		<div class="content-screen" />
 		<div class="section">
-			<p>This is a system</p>
+			<p style="color: white;">
+				* Private administative panel for business <br />
+				* Integrated Fel automatic invoices <br />
+				* Implemented business operations, logic and security <br />
+				* Implemented Material UI design <br />
+			</p>
 			<div class="tools">
 				<div>
 					<MuiIcon />
@@ -47,25 +52,20 @@
 			</div>
 		</div>
 		<div class="section">
-			<p>
-				Nulla eu consectetur leo. Suspendisse pharetra interdum magna. Maecenas efficitur tortor
-				turpis, sed eleifend felis auctor in. Ut ut massa nunc. Proin cursus gravida est, sit amet
-				accumsan diam aliquet ac. Proin non ex hendrerit, maximus odio quis, lobortis metus. Vivamus
-				malesuada libero at tincidunt mattis.
-			</p>
+			
 		</div>
 	</div>
 </div>
 
 <style>
 	.container {
-		padding: 30vh 0;
-		display: flex;
-		justify-content: center;
 		background-color: #f8201f;
-		width: 100vw;
+		display: flex;
 		height: 100vh;
-		overflow-y: scroll;
+		justify-content: center;
+		overflow-y: auto;
+		padding: 30vh 0;
+		width: 100vw;
 	}
 
 	.title {
@@ -73,83 +73,100 @@
 	}
 
 	.tools {
-		width: fit-content;
-		height: 60px;
+		align-items: center;
 		background-color: #f5f5f5;
 		border-radius: 20px;
-		/* margin: 0px; */
-		align-items: center;
-		display: flex;
-		justify-content: center;
 		box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-top: 20px;
+		width: 100%;
 	}
 
 	.tools * {
-		display: flex;
-		justify-content: center;
 		align-items: center;
-		height: 40px;
-		width: 40px;
-		margin: 0 3px;
-		padding: 8px;
 		border-radius: 100%;
+		display: flex;
+		height: 40px;
+		justify-content: center;
+		margin: 0 0px;
+		padding: 8px;
+		width: 40px;
 	}
 
 	.section {
-		background-color: green;
+		align-items: center;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
 		padding: 15px;
-		box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-		height: 50vh;
 		width: 100%;
+		color: white;
 	}
 
 	.content {
-		width: 80vw;
+		background-color: #f8201f;
 		display: flex;
 		flex-direction: column;
+		height: 120vh;
+		padding: 0 10vw;
 		position: relative;
+		width: 100vw;
 	}
 
 	.move-upside {
-		position: absolute;
-		z-index: 0;
-		animation-name: blur;
-		animation-duration: 0.6s;
 		animation-delay: 1s;
-		animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+		animation-duration: 0.6s;
 		animation-fill-mode: forwards;
-		position: absolute;
-		top: 50%;
+		animation-name: move-up;
+		animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 		left: 50%;
+		top: 50%;
+		position: absolute;
 		transform: translate(-50%, -50%);
+		z-index: 10;
 	}
 
 	.content-screen {
+		animation-delay: 1.4s;
+		animation-duration: 2s;
+		animation-fill-mode: forwards;
+		animation-name: hide-screen;
+		animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+		background-color: #f8201f;
+		height: 100%;
+		left: 0;
 		position: absolute;
 		width: 100%;
-		height: 100%;
-		background-color: #f8201f;
-		animation-name: hide-screen;
-		animation-duration: 1s;
-		animation-delay: 1.6s;
-		animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
-		animation-fill-mode: forwards;
+	}
+
+	.image {
+		width: 100%;
+		border-radius: 20px;
+		box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 	}
 
 	@keyframes hide-screen {
-		100% {
+		50% {
 			transform: translateY(100%);
 		}
+		100% {
+			display: none;
+			transform: translateY(100%);
+		}
+		
 	}
 
-	@keyframes blur {
+	@keyframes move-up {
 		100% {
 			top: 20%;
+			z-index: 0;
 		}
 	}
 
 	@media (min-width: 768px) {
-		@keyframes blur {
+		@keyframes move-up {
 			100% {
 				top: 15%;
 			}
@@ -163,6 +180,9 @@
 		}
 		.content-screen {
 			height: 60%;
+		}
+		.tools {
+			width: fit-content;
 		}
 	}
 </style>

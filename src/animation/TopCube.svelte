@@ -4,7 +4,6 @@
 	import type { ColorRepresentation } from 'three'
 	import { Editable } from '@threlte/theatre'
 
-	export let name: string = 'default'
 	export let color: ColorRepresentation | [color: ColorRepresentation] | undefined = 'red'
 	export let animate: number = 1
 	export let x: number = 0
