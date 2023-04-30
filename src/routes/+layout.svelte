@@ -35,8 +35,8 @@
 			animateMenu = false
 			setTimeout(() => {
 				renderMenu = false
+				hoverExit()
 			}, 500)
-			hoverExit()
 			$currentScene = sceneOnClose
 		}
 	}

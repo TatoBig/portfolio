@@ -6,6 +6,7 @@
 	import { spring } from 'svelte/motion'
 	import { writable } from 'svelte/store'
 	import { Editable } from '@threlte/theatre'
+  import { hover, hoverExit } from '@components/tools/Hover'
 
 	export let trigger: () => void
 	export let color: ColorRepresentation | [color: ColorRepresentation] | undefined = 'red'
@@ -44,8 +45,14 @@
 		<InteractiveObject
 			interactive
 			object={ref}
-			on:pointerenter={() => ($upside = 2)}
-			on:pointerleave={() => (!active && !alreadyActive ? ($upside = 0) : undefined)}
+			on:pointerenter={() => {
+				$upside = 2
+				hover({ size: 30 })
+			}}
+			on:pointerleave={() => {
+				!active && !alreadyActive ? ($upside = 0) : undefined
+				hoverExit()
+			}}
 			on:pointerdown={() => {
 				active = true
 				$upside = 2

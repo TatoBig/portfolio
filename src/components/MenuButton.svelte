@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Canvas, T, PerspectiveCamera, OrbitControls, InteractiveObject } from '@threlte/core'
 	import { spring } from 'svelte/motion'
+  import { hover, hoverExit } from './tools/Hover'
 
 	export let openMenu: () => void
 
@@ -29,8 +30,14 @@
 			<InteractiveObject
 				object={ref}
 				interactive
-				on:pointerenter={() => ($scale = 1.4)}
-				on:pointerleave={() => ($scale = 1)}
+				on:pointerenter={() => {
+					hover({ text: 'Menu'})
+					$scale = 1.4
+				}}
+				on:pointerleave={() => {
+					hoverExit()
+					$scale = 1
+				}}
 				on:click={() => openMenu()}
 			/>
 		</T.Mesh>

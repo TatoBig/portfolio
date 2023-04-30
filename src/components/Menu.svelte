@@ -35,7 +35,7 @@
 		<InteractiveObject
 			object={ref}
 			interactive
-			on:pointerenter={() => hover({ text: 'Home', color: 'black' })}
+			on:pointerenter={() => hover({ text: 'Home' })}
 			on:pointerleave={() => hoverExit()}
 			on:click={() => handleClick('/')}
 		/>
@@ -46,7 +46,7 @@
 		<InteractiveObject
 			object={ref}
 			interactive
-			on:pointerenter={() => hover({ text: 'About', color: 'black' })}
+			on:pointerenter={() => hover({ text: 'About' })}
 			on:pointerleave={() => hoverExit()}
 			on:click={() => handleClick('/#about')}
 		/>
@@ -57,7 +57,7 @@
 		<InteractiveObject
 			object={ref}
 			interactive
-			on:pointerenter={() => hover({ text: 'Works', color: 'black' })}
+			on:pointerenter={() => hover({ text: 'Works' })}
 			on:pointerleave={() => hoverExit()}
 			on:click={() => handleClick('/#works')}
 		/>
@@ -68,7 +68,7 @@
 		<InteractiveObject
 			object={ref}
 			interactive
-			on:pointerenter={() => hover({ text: 'Projects', color: 'black', size: 60 })}
+			on:pointerenter={() => hover({ text: 'Projects', size: 60 })}
 			on:pointerleave={() => hoverExit()}
 			on:click={() => handleClick('/#projects')}
 		/>
@@ -79,9 +79,20 @@
 		<InteractiveObject
 			object={ref}
 			interactive
-			on:pointerenter={() => hover({ text: 'Contact', color: 'black', size: 60 })}
+			on:pointerenter={() => hover({ text: 'Contact', size: 60 })}
 			on:pointerleave={() => hoverExit()}
 			on:click={() => handleClick('/#contact')}
+		/>
+	</T.Mesh>
+	<T.Mesh position={[0, -4, 0]} let:ref>
+		<T.SphereGeometry />
+		<T.MeshStandardMaterial color="cyan" />
+		<InteractiveObject
+			object={ref}
+			interactive
+			on:pointerenter={() => hover({ text: 'Blog' })}
+			on:pointerleave={() => hoverExit()}
+			on:click={() => handleClick('/#blog')}
 		/>
 	</T.Mesh>
 

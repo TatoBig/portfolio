@@ -49,7 +49,6 @@
 
 	const changeCurrentScene = (hash: string) => {
 		if (!transitioning) {
-			console.log(hash)
 			switch (hash) {
 				case '#works/gabriel':
 					initCamera([5, 5, 5, 4, 5, 2])
@@ -96,6 +95,10 @@
 					break
 				case '#contact':
 					$currentScene = 4
+					initCamera()
+					break
+				case '#blog':
+					$currentScene = 5
 					initCamera()
 					break
 				default:
@@ -167,9 +170,9 @@
 			setTimeout(() => {
 				disabledScrolling = false
 			}, 1000)
-			if (e.wheelDeltaY > 0) {
+			if (e.wheelDeltaY > 0 && $currentScene !== 0) {
 				$currentScene--
-			} else {
+			} else if ($currentScene !== 4 && e.wheelDeltaY < 0) {
 				$currentScene++
 			}
 			setHash()
@@ -192,6 +195,10 @@
 				break
 			case 4:
 				goto('#contact')
+				break
+			case 5:
+				goto('#blog')
+				break
 			default:
 				break
 		}
@@ -248,7 +255,7 @@
 				z: ($positionZ + (1 - $mouseX / innerWidth)) * 1.5,
 				y: ($positionY + (0.5 - $mouseY / innerHeight)) * 1.5
 			}}
-			fov={30}
+			fov={12}
 			lookAt={{ y: $cameraY, x: $cameraX, z: $cameraZ }}
 		>
 			<OrbitControls enableZoom={false} enabled={false} />
@@ -271,6 +278,7 @@
 		<WorksScene active={$currentScene === 2} {moveCamera} {alreadyActive} />
 		<ProjectsScene active={$currentScene === 3} {moveCamera} />
 		<ContactScene active={$currentScene === 4} />
+		<NameScene active={$currentScene === 5} />
 
 		<!-- <T.Mesh position.y={4} position.x={5} position.z={6}>
 				<T.BoxGeometry args={[1, 1, 1]} />

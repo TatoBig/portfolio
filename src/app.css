@@ -32,3 +32,18 @@ h5 {
 		font-weight: 500;
 	}
 }
+
+p {
+	font-family: Manrope, sans-serif;
+	font-size: 3vh;
+	letter-spacing: 2px;
+	margin: 2px;
+	color: white;
+}
+
+@media (min-width: 768px) {
+	p {
+		font-family: Manrope, sans-serif;
+		font-size: 4vh;
+	}
+}
