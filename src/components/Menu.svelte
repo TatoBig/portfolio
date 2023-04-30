@@ -1,38 +1,89 @@
 <script lang="ts">
 	import { Canvas, T, PerspectiveCamera, OrbitControls, InteractiveObject } from '@threlte/core'
-	import { spring } from 'svelte/motion'
+	import { hover, hoverExit } from './tools/Hover'
+  import Background from './assets/Background.svelte'
+  import { goto } from '$app/navigation'
 
-	export let openMenu: () => void
+  export let closeMenu: () => void
 
-	const scale = spring(1)
+
+	const handleClick = (page: string) => {
+		goto(page)
+		closeMenu()
+	}
 </script>
 
 <Canvas>
 	<T.DirectionalLight castShadow position={[3, 10, 8]} />
 	<T.DirectionalLight castShadow position={[-3, 10, -8]} />
+	<T.AmbientLight intensity={0.3} />
 
 	<PerspectiveCamera
 		position={{
-			x: 10,
-			z: 10,
-			y: 12
+			x: 15,
+			z: 15,
+			y: 15
 		}}
-		fov={12}
+		fov={20}
 		lookAt={{}}
 	>
 		<OrbitControls enableZoom={false} enabled={false} autoRotate />
 	</PerspectiveCamera>
-	<T.Group scale={$scale}>
-		<T.Mesh let:ref>
-			<T.BoxGeometry />
-			<T.MeshStandardMaterial color="black" />
-			<InteractiveObject
-				object={ref}
-				interactive
-				on:pointerenter={() => ($scale = 1.4)}
-				on:pointerleave={() => ($scale = 1)}
-				on:click={() => openMenu()}
-			/>
-		</T.Mesh>
-	</T.Group>
+	<T.Mesh position={[0, 0, 0]} let:ref>
+		<T.IcosahedronGeometry />
+		<T.MeshStandardMaterial color="green" />
+		<InteractiveObject
+			object={ref}
+			interactive
+			on:pointerenter={() => hover({ text: 'Home', color: 'black' })}
+			on:pointerleave={() => hoverExit()}
+			on:click={() => handleClick('/')}
+		/>
+	</T.Mesh>
+	<T.Mesh position={[3, 0, 0]} let:ref>
+		<T.TetrahedronGeometry />
+		<T.MeshStandardMaterial color="yellow" />
+		<InteractiveObject
+			object={ref}
+			interactive
+			on:pointerenter={() => hover({ text: 'About', color: 'black' })}
+			on:pointerleave={() => hoverExit()}
+			on:click={() => handleClick('/#about')}
+		/>
+	</T.Mesh>
+	<T.Mesh position={[-3, 0, 0]} let:ref>
+		<T.DodecahedronGeometry />
+		<T.MeshStandardMaterial color="red" />
+		<InteractiveObject
+			object={ref}
+			interactive
+			on:pointerenter={() => hover({ text: 'Works', color: 'black' })}
+			on:pointerleave={() => hoverExit()}
+			on:click={() => handleClick('/#works')}
+		/>
+	</T.Mesh>
+	<T.Mesh position={[0, 0, 3]} let:ref>
+		<T.OctahedronGeometry />
+		<T.MeshStandardMaterial color="gray" />
+		<InteractiveObject
+			object={ref}
+			interactive
+			on:pointerenter={() => hover({ text: 'Projects', color: 'black', size: 60 })}
+			on:pointerleave={() => hoverExit()}
+			on:click={() => handleClick('/#projects')}
+		/>
+	</T.Mesh>
+	<T.Mesh position={[0, 0, -3]} let:ref>
+		<T.BoxGeometry />
+		<T.MeshStandardMaterial color="blue" />
+		<InteractiveObject
+			object={ref}
+			interactive
+			on:pointerenter={() => hover({ text: 'Contact', color: 'black', size: 60 })}
+			on:pointerleave={() => hoverExit()}
+			on:click={() => handleClick('/#contact')}
+		/>
+	</T.Mesh>
+
+	<Background color="#F5F5F5" />
 </Canvas>

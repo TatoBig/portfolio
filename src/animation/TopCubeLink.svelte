@@ -24,7 +24,7 @@
 		if (alreadyActive) {
 			setTimeout(() => {
 				$upside = 0
-			}, 2000);
+			}, 2000)
 		}
 	}
 
@@ -42,11 +42,11 @@
 		let:ref
 	>
 		<InteractiveObject
-			object={ref}
 			interactive
+			object={ref}
 			on:pointerenter={() => ($upside = 2)}
 			on:pointerleave={() => (!active && !alreadyActive ? ($upside = 0) : undefined)}
-			on:click={() => {
+			on:pointerdown={() => {
 				active = true
 				$upside = 2
 				trigger()

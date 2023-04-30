@@ -6,12 +6,12 @@
 
 <div class="firstname-container">
 	<AnimatedText delay={2.8} hide={!active} controlled>
-		<h1>SANTIAGO</h1>
+		<h5>SANTIAGO</h5>
 	</AnimatedText>
 </div>
 <div class="lastname-container">
 	<AnimatedText delay={3} hide={!active} controlled>
-		<h1>NAVAS</h1>
+		<h5>NAVAS</h5>
 	</AnimatedText>
 </div>
 <div class="scroll">Scroll</div>
@@ -25,14 +25,14 @@
 	}
 
 	.firstname-container {
-		top: 5%;
-		left: 10%;
+		top: 7%;
+		left: 14.1%;
 		position: absolute;
 	}
 
 	.lastname-container {
-		top: 17%;
-		left: 43%;
+		top: 11%;
+		left: 14%;
 		position: absolute;
 	}
 </style>

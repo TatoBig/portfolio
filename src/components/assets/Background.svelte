@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Three from 'three'
 	import * as Threlte from '@threlte/core'
-	import Cube from '@animation/Cube.svelte'
 
 	export let color: Three.ColorRepresentation
 
@@ -15,11 +14,11 @@
 
 		const [x, y, z] = Array(3)
 			.fill()
-			.map(() => Three.MathUtils.randFloatSpread(45))
+			.map(() => Three.MathUtils.randFloatSpread(30))
 
 		star.position.set(x, y, z)
 		scene.add(star)
 	}
 
-	Array(300).fill().forEach(addStar)
+	Array(150).fill().forEach(addStar)
 </script>

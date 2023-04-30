@@ -1,23 +1,30 @@
 <script lang="ts">
 	import '@fontsource/urbanist'
 	import { Canvas, Fog } from '@threlte/core'
+	import { cubicOut } from 'svelte/easing'
+	import { currentScene } from '@components/tools/Stores'
+	import { goto } from '$app/navigation'
 	import { onMount } from 'svelte'
 	import { T, OrbitControls, PerspectiveCamera } from '@threlte/core'
+	import { spring, tweened, type Tweened } from 'svelte/motion'
 	import { writable } from 'svelte/store'
 	import AboutScene from '@components/scenes/AboutScene.svelte'
-	import NameScene from '@components/scenes/NameScene.svelte'
-	import WorksScene from '@components/scenes/WorksScene.svelte'
-	import { tweened, type Tweened } from 'svelte/motion'
-	import { cubicOut } from 'svelte/easing'
-	import { goto } from '$app/navigation'
 	import Background from '@components/assets/Background.svelte'
-	import ProjectsScene from '@components/scenes/ProjectsScene.svelte'
-	import NameContent from '@components/content/NameContent.svelte'
-	import Url from '@components/tools/Url'
 	import ContactScene from '@components/scenes/ContactScene.svelte'
-	import { currentScene } from '@components/tools/Stores'
+	import NameContent from '@components/content/NameContent.svelte'
+	import NameScene from '@components/scenes/NameScene.svelte'
+	import ProjectsScene from '@components/scenes/ProjectsScene.svelte'
+	import Url from '@components/tools/Url'
+	import WorksScene from '@components/scenes/WorksScene.svelte'
 
-	let mouse = writable({ x: 0, y: 0 })
+	let mouseX = tweened(0, {
+		duration: 500,
+		easing: cubicOut
+	})
+	let mouseY = tweened(0, {
+		duration: 500,
+		easing: cubicOut
+	})
 	let innerWidth = 0
 	let innerHeight = 0
 	let disabledScrolling = false
@@ -32,6 +39,13 @@
 	let positionZ: Tweened<number>
 
 	$: changeCurrentScene($Url?.hash ?? '/')
+
+	onMount(() => {
+		disabledScrolling = true
+		setTimeout(() => {
+			disabledScrolling = false
+		}, 3000)
+	})
 
 	const changeCurrentScene = (hash: string) => {
 		if (!transitioning) {
@@ -55,9 +69,8 @@
 						alreadyActive = 0
 					}, 500)
 					break
-					// [4, 3.4, 2, 4, 3.4, 2]
 				case '#works/oonee':
-					initCamera([6.7,4 , 2, 5, 3, 4])
+					initCamera([6.7, 4, 2, 5, 3, 4])
 					alreadyActive = 3
 					$currentScene = 2
 					setTimeout(() => {
@@ -120,52 +133,6 @@
 		})
 	}
 
-	onMount(() => {
-		disabledScrolling = true
-		setTimeout(() => {
-			disabledScrolling = false
-		}, 3000)
-	})
-
-	const handleMousemove = (event: any) => {
-		if (!transitioning) {
-			$mouse.x = event.clientX
-			$mouse.y = event.clientY
-		}
-	}
-
-	const handleMouseWheel = (e: any) => {
-		if (!disabledScrolling && !transitioning) {
-			disabledScrolling = true
-			setTimeout(() => {
-				disabledScrolling = false
-			}, 1000)
-			if (e.wheelDeltaY > 0) {
-				$currentScene--
-			} else {
-				$currentScene++
-			}
-			switch ($currentScene) {
-				case 0:
-					goto('/')
-					break
-				case 1:
-					goto('#about')
-					break
-				case 2:
-					goto('#works')
-					break
-				case 3:
-					goto('#projects')
-					break
-				case 4:
-					goto('#contact')
-				default:
-					break
-			}
-		}
-	}
-
 	const moveCamera = (pos: number[], page?: string) => {
 		transitioning = true
 		positionX.set(pos[0] ?? 15)
@@ -186,6 +153,83 @@
 			}, 3000)
 		}
 	}
+
+	const handleMousemove = (event: any) => {
+		if (!transitioning) {
+			$mouseX = event.clientX
+			$mouseY = event.clientY
+		}
+	}
+
+	const handleMouseWheel = (e: any) => {
+		if (!disabledScrolling && !transitioning) {
+			disabledScrolling = true
+			setTimeout(() => {
+				disabledScrolling = false
+			}, 1000)
+			if (e.wheelDeltaY > 0) {
+				$currentScene--
+			} else {
+				$currentScene++
+			}
+			setHash()
+		}
+	}
+
+	const setHash = () => {
+		switch ($currentScene) {
+			case 0:
+				goto('/')
+				break
+			case 1:
+				goto('#about')
+				break
+			case 2:
+				goto('#works')
+				break
+			case 3:
+				goto('#projects')
+				break
+			case 4:
+				goto('#contact')
+			default:
+				break
+		}
+	}
+
+	let startTime: number
+	let startX: number
+	let startY: number
+	let allowedTime: number = 300
+	let restraint: number = 300
+	let threshold: number = 150
+
+	const handleStartTouch = (e: TouchEvent) => {
+		let touchobj = e.changedTouches[0]
+		startX = touchobj.pageX
+		startY = touchobj.pageY
+		startTime = new Date().getTime()
+		e.preventDefault()
+	}
+
+	const handleEndTouch = (e: TouchEvent) => {
+		let touchobj = e.changedTouches[0]
+		let distX = touchobj.pageX - startX
+		let distY = touchobj.pageY - startY
+		let elapsedTime = new Date().getTime() - startTime
+		let swipedir: string = ''
+		if (elapsedTime <= allowedTime) {
+			if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) {
+				swipedir = distX < 0 ? 'left' : 'right'
+			} else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint) {
+				swipedir = distY < 0 ? 'up' : 'down'
+			}
+		}
+		if (swipedir === 'up') $currentScene++
+		if (swipedir === 'down') $currentScene--
+		setHash()
+		e.preventDefault()
+	}
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -193,17 +237,18 @@
 	class="container"
 	on:mousemove={handleMousemove}
 	on:mousewheel={handleMouseWheel}
-	on:dragenter={(e) => console.log(e)}
+	on:touchstart={(e) => handleStartTouch(e)}
+	on:touchend={(e) => handleEndTouch(e)}
 >
 	<!-- <div class="container"> -->
 	<Canvas>
 		<PerspectiveCamera
 			position={{
-				x: ($positionX + $mouse.x / innerWidth) * 1.5,
-				z: ($positionZ + (1 - $mouse.x / innerWidth)) * 1.5,
-				y: ($positionY + (0.5 - $mouse.y / innerHeight)) * 1.5
+				x: ($positionX + $mouseX / innerWidth) * 1.5,
+				z: ($positionZ + (1 - $mouseX / innerWidth)) * 1.5,
+				y: ($positionY + (0.5 - $mouseY / innerHeight)) * 1.5
 			}}
-			fov={12}
+			fov={30}
 			lookAt={{ y: $cameraY, x: $cameraX, z: $cameraZ }}
 		>
 			<OrbitControls enableZoom={false} enabled={false} />
@@ -212,9 +257,9 @@
 		<T.DirectionalLight
 			castShadow
 			position={[
-				10 * ($mouse.x / innerWidth),
-				10 * (1 - $mouse.y / innerHeight),
-				10 * (1 - $mouse.x / innerWidth)
+				10 * ($mouseX / innerWidth),
+				10 * (1 - $mouseY / innerHeight),
+				10 * (1 - $mouseX / innerWidth)
 			]}
 		/>
 		<T.AmbientLight intensity={0.2} />

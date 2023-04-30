@@ -2,11 +2,15 @@
 	// import ASScroll from '@ashthornton/asscroll'
 	import { onMount } from 'svelte'
 	import '../app.css'
-	import Menu from '@components/Menu.svelte'
+	import MenuButton from '@components/MenuButton.svelte'
 	import { currentScene } from '@components/tools/Stores'
+	import Menu from '@components/Menu.svelte'
+	import Cursor from '@components/Cursor.svelte'
+  import { hoverExit } from '@components/tools/Hover'
 
 	let show = true
-	let menu = false
+	let renderMenu = false
+	let animateMenu = false
 	let sceneOnClose: number
 
 	// const initialFunction = () => {
@@ -22,23 +26,33 @@
 	})
 
 	const openMenu = () => {
-		if (!menu) {
-			menu = true
+		if (!renderMenu) {
+			renderMenu = true
+			animateMenu = true
 			sceneOnClose = $currentScene
 			$currentScene = -1
 		} else {
-			menu = false
+			animateMenu = false
+			setTimeout(() => {
+				renderMenu = false
+			}, 500)
+			hoverExit()
 			$currentScene = sceneOnClose
 		}
 	}
 </script>
 
 <div class="layout">
-	<div class={`menu-screen ${menu ? 'open' : 'closed'}`} />
+	{#if renderMenu}
+		<div class={`menu-screen ${animateMenu ? 'open' : 'closed'}`}>
+			<Menu closeMenu={openMenu} />
+		</div>
+	{/if}
 	<div class="menu-button">
-		<Menu {openMenu} />
+		<MenuButton {openMenu} />
 	</div>
 	<slot />
+	<Cursor />
 </div>
 
 <!-- <div class="layout-container">
@@ -58,27 +72,60 @@
 
 	.menu-button {
 		position: absolute;
-		width: 10%;
+		width: 150px;
 		top: 0;
-		right: 0%;
+		right: 0;
 		z-index: 10;
+		transition: all 2s cubic-bezier(0.075, 0.82, 0.165, 1);
 	}
 
 	.closed {
-		transform: translateX(100%);
+		animation-name: hideAnimation;
+		animation-duration: 0.5s;
+		animation-timing-function: ease-in-out;
+		opacity: 0;
 	}
 
 	.open {
-		transform: translateY(0%);
+		animation-name: blur;
+		animation-duration: 8s;
+		animation-timing-function: ease-in-out;
+		opacity: 1;
 	}
 
 	.menu-screen {
 		position: absolute;
 		z-index: 5;
-		background-color: red;
+		background-color: white;
 		width: 100vw;
 		height: 100vh;
 		top: 0;
 		left: 0;
+	}
+
+	@keyframes blur {
+		0% {
+			filter: blur(20px);
+			opacity: 0;
+		}
+		10% {
+			opacity: 0.2;
+		}
+		25%,
+		100% {
+			filter: blur(0px);
+			opacity: 1;
+		}
+	}
+
+	@keyframes hideAnimation {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+			filter: blur(20px);
+			display: none;
+		}
 	}
 </style>
